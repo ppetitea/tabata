@@ -1,0 +1,5 @@
+export const TRAINING_LIST_SET = "TRAINING_LIST_SET";
+export const TRAINING_ADD = "TRAINING_ADD";
+export const TRAINING_MOD = "TRAINING_MOD";
+export const TRAINING_DEL = "TRAINING_DEL";
+export const TRAINING_MOVE = "TRAINING_MOVE";
