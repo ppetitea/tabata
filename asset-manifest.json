@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/tabata/static/css/main.b0dc5118.chunk.css",
-    "main.js": "/tabata/static/js/main.edec3b34.chunk.js",
-    "main.js.map": "/tabata/static/js/main.edec3b34.chunk.js.map",
-    "runtime-main.js": "/tabata/static/js/runtime-main.75f0e721.js",
-    "runtime-main.js.map": "/tabata/static/js/runtime-main.75f0e721.js.map",
-    "static/js/2.2fb7c32f.chunk.js": "/tabata/static/js/2.2fb7c32f.chunk.js",
-    "static/js/2.2fb7c32f.chunk.js.map": "/tabata/static/js/2.2fb7c32f.chunk.js.map",
-    "static/js/3.72177bb7.chunk.js": "/tabata/static/js/3.72177bb7.chunk.js",
-    "static/js/3.72177bb7.chunk.js.map": "/tabata/static/js/3.72177bb7.chunk.js.map",
+    "main.js": "/tabata/static/js/main.f5adb74d.chunk.js",
+    "main.js.map": "/tabata/static/js/main.f5adb74d.chunk.js.map",
+    "runtime-main.js": "/tabata/static/js/runtime-main.949b3e75.js",
+    "runtime-main.js.map": "/tabata/static/js/runtime-main.949b3e75.js.map",
+    "static/js/2.745d6254.chunk.js": "/tabata/static/js/2.745d6254.chunk.js",
+    "static/js/2.745d6254.chunk.js.map": "/tabata/static/js/2.745d6254.chunk.js.map",
+    "static/js/3.c0f383cc.chunk.js": "/tabata/static/js/3.c0f383cc.chunk.js",
+    "static/js/3.c0f383cc.chunk.js.map": "/tabata/static/js/3.c0f383cc.chunk.js.map",
     "index.html": "/tabata/index.html",
     "static/css/main.b0dc5118.chunk.css.map": "/tabata/static/css/main.b0dc5118.chunk.css.map",
-    "static/js/2.2fb7c32f.chunk.js.LICENSE.txt": "/tabata/static/js/2.2fb7c32f.chunk.js.LICENSE.txt"
+    "static/js/2.745d6254.chunk.js.LICENSE.txt": "/tabata/static/js/2.745d6254.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.75f0e721.js",
-    "static/js/2.2fb7c32f.chunk.js",
+    "static/js/runtime-main.949b3e75.js",
+    "static/js/2.745d6254.chunk.js",
     "static/css/main.b0dc5118.chunk.css",
-    "static/js/main.edec3b34.chunk.js"
+    "static/js/main.f5adb74d.chunk.js"
   ]
 }
