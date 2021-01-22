@@ -12,10 +12,12 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AddIcon from "@material-ui/icons/Add";
-import Exercise from "../../models/Exercise";
 import Item from "./components/Item";
 import ExerciseForm from "./components/ExerciseForm";
-import { connect } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
+import { modTraining } from "../../redux/actions/trainingListAction";
+import Training, { TrainingStep } from "../../models/Training";
+import { setCurrTraining } from "../../redux/actions/currTrainingAction";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -45,8 +47,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const mock = [Exercise().setTitle("Abdo"), Exercise().setTitle("Jumping Jack")];
-
 const HomePage = (props) => {
   const { dispatch, training } = props;
   const classes = useStyles();
@@ -60,9 +60,21 @@ const HomePage = (props) => {
       <AppBar title="Tabata" />
       <Paper variant="outlined" className={classes.paper}>
         <List className={classes.list}>
-          {training.getCollection("items").map((item) => (
-            <Item title={item.getTitle()} />
-          ))}
+          {training.items.map((item, i) => {
+            const rehydrated = TrainingStep(item);
+            return (
+              <Item
+                key={i}
+                title={rehydrated.title}
+                time={rehydrated.duration}
+                onDelete={() => {
+                  let nextTraining = Training(training);
+                  nextTraining.delItemByIndex("items", i);
+                  dispatch(setCurrTraining(nextTraining));
+                }}
+              />
+            );
+          })}
           <ListItem>
             <Button
               variant="outlined"
@@ -86,18 +98,13 @@ const HomePage = (props) => {
           Entrainement
         </Button>
       </div>
-      <ExerciseForm
-        dispatch={dispatch}
-        training={training}
-        open={open}
-        handleClose={handleClose}
-      />
+      <ExerciseForm open={open} handleClose={handleClose} />
     </div>
   );
 };
 
 const MapStateToProps = (state) => ({
-  training: state.trainingList.list.find((i) => i.getId() === "default"),
+  training: Training(state.currTraining),
 });
 
 export default connect(MapStateToProps)(HomePage);

@@ -6,40 +6,57 @@ import Typography from "@material-ui/core/Typography";
 // import Button from "@material-ui/core/Button";
 // import IconButton from "@material-ui/core/IconButton";
 // import MenuIcon from "@material-ui/icons/Menu";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import { IconButton } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    // marginRight: theme.spacing(2),
+  },
+  leftButtonContainer: {
+    flex: 1,
+    // backgroundColor: "blue",
   },
   title: {
     flexGrow: 1,
     textAlign: "center",
+    // backgroundColor: "red",
+  },
+  right: {
+    // marginLeft: theme.spacing(2),
+    // backgroundColor: "green",
+    flex: 1,
   },
 }));
 
 export default function AppBar(props) {
-  const { title } = props;
+  const { title, backIcon } = props;
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
       <MUIAppBar position="static">
         <Toolbar>
-          {/* <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-          >
-            <MenuIcon />
-          </IconButton> */}
+          {backIcon && (
+            <div className={classes.leftButtonContainer}>
+              <IconButton
+                edge="start"
+                className={classes.menuButton}
+                color="inherit"
+                aria-label="back"
+                href="/"
+              >
+                <ChevronLeftIcon />
+              </IconButton>
+            </div>
+          )}
           <Typography variant="h6" className={classes.title}>
             {title}
           </Typography>
-          {/* <Button color="inherit">Login</Button> */}
+          {backIcon && <Typography className={classes.title}> </Typography>}
         </Toolbar>
       </MUIAppBar>
     </div>

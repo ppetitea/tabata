@@ -27,7 +27,8 @@ const trainingListReducer = (state = initialState(), action) => {
     }
     case TRAINING_MOD: {
       const nextTraining = { ...action.payload };
-      const nextList = state.list.map((inner) => {
+      const nextList = state.list.map((i) => {
+        const inner = Training(i);
         return inner.getId() === nextTraining.getId() ? nextTraining : inner;
       });
       const nextState = { ...state, list: nextList };
@@ -35,7 +36,8 @@ const trainingListReducer = (state = initialState(), action) => {
     }
     case TRAINING_DEL: {
       const nextTraining = { ...action.payload };
-      const nextList = state.list.filter((inner) => {
+      const nextList = state.list.filter((i) => {
+        const inner = Training(i);
         return inner.getId() !== nextTraining.getId();
       });
       const nextState = { ...state, list: nextList };

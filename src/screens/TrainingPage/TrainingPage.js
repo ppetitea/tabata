@@ -1,4 +1,4 @@
-import React, { Dimensions } from "react";
+import React, { Dimensions, useEffect, useState } from "react";
 import {
   Button,
   IconButton,
@@ -14,6 +14,10 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AddIcon from "@material-ui/icons/Add";
+import { connect } from "react-redux";
+import Training from "../../models/Training";
+import Timer from "../../models/Timer";
+import { setCurrTraining } from "../../redux/actions/currTrainingAction";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -55,6 +59,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 30,
     margin: 10,
     width: "90%",
+    height: "20%",
+    "overflow-y": "scroll",
   },
   list: {
     justifyContent: "center",
@@ -83,14 +89,47 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const useTimer = () => {
+  const [state, setState] = useState(Timer().initTimer());
+
+  const play = () => setState({ ...Timer(state).play() });
+  const replay = () => setState({ ...Timer(state).replay() });
+  const pause = () => setState({ ...Timer(state).pause() });
+  const stop = () => setState({ ...Timer(state).stop() });
+  const increment = () => setState({ ...Timer(state).increment() });
+  const setTime = (v) => setState({ ...Timer(state).setTime(v) });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (state && state.isRunning) increment();
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [state]);
+
+  return {
+    timer: state,
+    play,
+    replay,
+    pause,
+    stop,
+    setTime,
+  };
+};
+
 const TrainingPage = (props) => {
   const classes = useStyles();
+  const { training, dispatch } = props;
+  const { timer, play, replay, pause, stop, setTime } = useTimer();
+
+  const time = timer ? timer.time : 0;
+  if (training.isEnded(time)) stop();
+
   return (
     <div className={classes.root}>
-      <AppBar title="Training" />
+      <AppBar title="Training" backIcon={true} />
       <div className={classes.body}>
         <Typography className={classes.title} variant="h4" color="secondary">
-          Jumping Jack
+          {training.getStepByTime(time).title}
         </Typography>
         <div className={classes.progressArea}>
           <CircularProgress
@@ -101,7 +140,7 @@ const TrainingPage = (props) => {
           />
           <CircularProgress
             variant="determinate"
-            value={75}
+            value={training.getPercent(time) * 100}
             size={"16rem"}
             className={classes.circleOut}
           />
@@ -114,35 +153,70 @@ const TrainingPage = (props) => {
           />
           <CircularProgress
             variant="determinate"
-            value={75}
+            value={training.getStepPercent(time) * 100}
             size={"13rem"}
             className={classes.circleIn}
             color="secondary"
           />
           <Typography className={classes.timer} variant="h2" color="secondary">
-            30s
+            {training.getStepTime(time) / 1000}s
           </Typography>
         </div>
         <Paper variant="outlined" className={classes.paper}>
           <List className={classes.list}>
-            <ListItem button>
-              <ListItemText primary="Abdo" />
-              <ListItemText primary="30s" className={classes.time} />
-            </ListItem>
-            <ListItem button>
-              <ListItemText primary="Jumping Jack" />
-              <ListItemText primary="30s" className={classes.time} />
-            </ListItem>
+            {training.getRemainingSteps(time).map((item, i) => {
+              return (
+                <ListItem
+                  button
+                  key={`${i}`}
+                  onClick={() => setTime(training.getStepStartTime(item.id))}
+                >
+                  <ListItemText primary={item.title} />
+                  <ListItemText
+                    primary={`${item.duration / 1000}s`}
+                    className={classes.time}
+                  />
+                </ListItem>
+              );
+            })}
           </List>
         </Paper>
         <div className={classes.trainingButtonContainer}>
           <Button
+            disabled={!timer.can("play")}
             variant="contained"
             color="primary"
-            href="/"
+            onClick={() => play()}
+            className={classes.trainingButton}
+          >
+            Play
+          </Button>
+          <Button
+            disabled={!timer.can("pause")}
+            variant="contained"
+            color="primary"
+            onClick={() => pause()}
             className={classes.trainingButton}
           >
             Pause
+          </Button>
+          <Button
+            disabled={!timer.can("stop")}
+            variant="contained"
+            color="primary"
+            onClick={() => stop()}
+            className={classes.trainingButton}
+          >
+            Stop
+          </Button>
+          <Button
+            disabled={!timer.can("replay")}
+            variant="contained"
+            color="primary"
+            onClick={() => replay()}
+            className={classes.trainingButton}
+          >
+            Replay
           </Button>
         </div>
       </div>
@@ -150,4 +224,8 @@ const TrainingPage = (props) => {
   );
 };
 
-export default TrainingPage;
+const MapStateToProps = (state) => ({
+  training: Training(state.currTraining),
+});
+
+export default connect(MapStateToProps)(TrainingPage);

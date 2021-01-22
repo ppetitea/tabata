@@ -1,6 +1,27 @@
+export const canHandleInit = (state) => ({
+  fromLastState: (lastState) => {
+    Object.assign(state, lastState);
+    return state;
+  },
+  re: (lastState) => {
+    Object.assign(state, lastState);
+    return state;
+  },
+  fromCollection: (collection, test) => {
+    return state.re(collection.find((i) => test(state.re(i))));
+  },
+  fromCollectionById: (collection, id) => {
+    const test = (state) => state.getId() === id;
+    return state.fromCollection(collection, test);
+  },
+  fromCollectionByKey: (collection, key) => {
+    const test = (state) => state.getKey() === key;
+    return state.fromCollection(collection, test);
+  },
+});
+
 export const canHandleTitle = (state) => ({
   getTitle: () => state.title,
-
   setTitle: (v) => {
     state.title = v;
     return state;
@@ -9,15 +30,38 @@ export const canHandleTitle = (state) => ({
 
 export const canHandleId = (state) => ({
   getId: () => state.id,
-
   setId: (v) => {
     state.id = v;
     return state;
   },
 });
 
+export const canHandleVisibility = (state) => ({
+  setVisible: (v) => {
+    state.visible = v;
+    return state;
+  },
+  hide: () => state.setVisible(false),
+  show: () => state.setVisible(true),
+});
+
+export const canHandleDuration = (state) => ({
+  getDuration: () => state.duration,
+  setDuration: (v) => {
+    state.duration = v;
+    return state;
+  },
+});
+
 export const canHandleCollection = (state) => ({
   getCollection: (collection) => state[collection],
+  getFirst: (collection) => {
+    return state[collection].length >= 1 ? state[collection][0] : null;
+  },
+  getLast: (collection) => {
+    const length = state[collection].length;
+    return length >= 1 ? state[collection][length - 1] : null;
+  },
   setCollection: (collection, items) => {
     state[collection] = items;
     return state;
@@ -31,7 +75,9 @@ export const canHandleCollection = (state) => ({
     }
   },
   addItem: (collection, item) => {
-    state[collection] = [...state[collection], item];
+    if (state[collection]) {
+      state[collection] = [...state[collection], item];
+    } else state[collection] = [item];
     return state;
   },
   addItemStart: (collection, item) => {
@@ -71,6 +117,64 @@ export const canHandleCollection = (state) => ({
       if (item.getKey() === nextItem.getKey()) return nextItem;
       else return item;
     });
+    return state;
+  },
+});
+
+export const canHandleActions = (state) => ({
+  getActions: () => state.actions,
+  setActions: (actions = []) => {
+    state.actions = actions;
+    return state;
+  },
+  can: (action) => {
+    if (state.actions && state.actions.find((i) => i === action)) return true;
+    else return false;
+  },
+});
+
+export const canHandleTimer = (state) => ({
+  ...canHandleActions(state),
+  initTimer: () => {
+    state.time = 0;
+    state.isRunning = false;
+    state.actions = ["play"];
+    return state;
+  },
+  setTime: (v) => {
+    state.time = v;
+    return state;
+  },
+  increment: (ms = 1000) => {
+    if (isNaN(state.time)) state.time = 0;
+    state.time += ms;
+    return state;
+  },
+  decrement: (ms = 1000) => {
+    if (state.time - ms >= 0) state.time -= ms;
+    else state.time = 0;
+    return state;
+  },
+  play: () => {
+    state.isRunning = true;
+    state.actions = ["pause", "stop"];
+    return state;
+  },
+  replay: () => {
+    state.time = 0;
+    state.isRunning = true;
+    state.actions = ["pause", "stop"];
+    return state;
+  },
+  pause: () => {
+    state.isRunning = false;
+    state.actions = ["play", "replay"];
+    return state;
+  },
+  stop: () => {
+    state.time = 0;
+    state.isRunning = false;
+    state.actions = ["play"];
     return state;
   },
 });

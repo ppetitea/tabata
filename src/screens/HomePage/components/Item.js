@@ -7,18 +7,20 @@ import DeleteIcon from "@material-ui/icons/Delete";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
+  time: { textAlign: "end" },
 }));
 
 const Item = (props) => {
   const classes = useStyles();
 
-  const { title, onPress = () => {}, onDelete = () => {} } = props;
+  const { title, time, onPress = () => {}, onDelete = () => {} } = props;
 
   return (
-    <ListItem button>
+    <ListItem button onClick={onPress}>
       <ListItemText primary={title} />
+      <ListItemText className={classes.time} primary={`${time / 1000}s`} />
       <ListItemSecondaryAction>
-        <IconButton edge="end" aria-label="comments">
+        <IconButton edge="end" aria-label="comments" onClick={onDelete}>
           <DeleteIcon />
         </IconButton>
       </ListItemSecondaryAction>
