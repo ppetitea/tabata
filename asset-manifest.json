@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/tabata/static/css/main.b0dc5118.chunk.css",
-    "main.js": "/tabata/static/js/main.5cea7f73.chunk.js",
-    "main.js.map": "/tabata/static/js/main.5cea7f73.chunk.js.map",
+    "main.js": "/tabata/static/js/main.1a826a5a.chunk.js",
+    "main.js.map": "/tabata/static/js/main.1a826a5a.chunk.js.map",
     "runtime-main.js": "/tabata/static/js/runtime-main.8d841b57.js",
     "runtime-main.js.map": "/tabata/static/js/runtime-main.8d841b57.js.map",
-    "static/js/2.1310ea9c.chunk.js": "/tabata/static/js/2.1310ea9c.chunk.js",
-    "static/js/2.1310ea9c.chunk.js.map": "/tabata/static/js/2.1310ea9c.chunk.js.map",
+    "static/js/2.0b7a9b72.chunk.js": "/tabata/static/js/2.0b7a9b72.chunk.js",
+    "static/js/2.0b7a9b72.chunk.js.map": "/tabata/static/js/2.0b7a9b72.chunk.js.map",
     "static/js/3.24962555.chunk.js": "/tabata/static/js/3.24962555.chunk.js",
     "static/js/3.24962555.chunk.js.map": "/tabata/static/js/3.24962555.chunk.js.map",
     "index.html": "/tabata/index.html",
     "static/css/main.b0dc5118.chunk.css.map": "/tabata/static/css/main.b0dc5118.chunk.css.map",
-    "static/js/2.1310ea9c.chunk.js.LICENSE.txt": "/tabata/static/js/2.1310ea9c.chunk.js.LICENSE.txt"
+    "static/js/2.0b7a9b72.chunk.js.LICENSE.txt": "/tabata/static/js/2.0b7a9b72.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.8d841b57.js",
-    "static/js/2.1310ea9c.chunk.js",
+    "static/js/2.0b7a9b72.chunk.js",
     "static/css/main.b0dc5118.chunk.css",
-    "static/js/main.5cea7f73.chunk.js"
+    "static/js/main.1a826a5a.chunk.js"
   ]
 }
