@@ -18,6 +18,7 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import { modTraining } from "../../redux/actions/trainingListAction";
 import Training, { TrainingStep } from "../../models/Training";
 import { setCurrTraining } from "../../redux/actions/currTrainingAction";
+import { config } from "../../services/services";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -92,7 +93,7 @@ const HomePage = (props) => {
         <Button
           variant="contained"
           color="primary"
-          href="/training"
+          href={config.isProdEnv() ? "#/training" : "/training"}
           className={classes.trainingButton}
         >
           Entrainement

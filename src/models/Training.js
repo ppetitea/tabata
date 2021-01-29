@@ -27,22 +27,29 @@ const canHandleTrainingSteps = (state) => ({
     let min = 0;
     let max = 0;
     let index = 0;
-    const item = state.items.find((item) => {
+    let item = state.items.find((item) => {
       min = max;
       max += item.duration;
       index++;
-      return maths.belongRange(min, max, time);
+      return maths.belongRangeMin(min, max, time);
     });
+    if (!item) item = state.items[state.items.length - 1];
     return { item, min, max, index };
   },
   getStepByTime: (time) => state.getStepByTimeWithRange(time).item,
+  getStepIndex: (time) => state.getStepByTimeWithRange(time).index,
   getStepInstant: (time) => {
     const { item, min } = state.getStepByTimeWithRange(time);
     const stepTime = min ? time - min : time;
     const percent = item ? stepTime / item.duration : 0;
-    return { time: stepTime, percent };
+    return { item, time: stepTime, percent };
   },
   getStepTime: (time) => state.getStepInstant(time).time,
+  getStepTimeDecrement: (timerTime) => {
+    const { item, time } = state.getStepInstant(timerTime);
+    const decrement = item.duration - time;
+    return decrement;
+  },
   getStepPercent: (time) => state.getStepInstant(time).percent,
   getDuration: () => {
     let duration = 0;
@@ -64,6 +71,14 @@ const canHandleTrainingSteps = (state) => ({
     }
     return start;
   },
+  isStepEnded: (time) => {
+    const step = state.getStepInstant(time);
+    return step.time === step.item.duration;
+  },
+  isStepStarted: (time) => {
+    const step = state.getStepInstant(time);
+    return step.time === 0;
+  },
 });
 
 const Training = (lastState = {}) => {
@@ -80,5 +95,16 @@ const Training = (lastState = {}) => {
   return state;
 };
 
-export { Training, TrainingStep };
+const TrainingList = (lastState = {}) => {
+  let state = { ...lastState };
+
+  const behavior = (state) => ({
+    ...canHandleId(state),
+    ...canHandleCollection(state),
+  });
+  Object.assign(state, behavior(state));
+  return state;
+};
+
+export { Training, TrainingStep, TrainingList };
 export default Training;

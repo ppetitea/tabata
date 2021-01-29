@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 // import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { IconButton } from "@material-ui/core";
+import { withRouter } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,8 +33,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function AppBar(props) {
-  const { title, backIcon } = props;
+const AppBar = (props) => {
+  const { title, backIcon, history } = props;
   const classes = useStyles();
 
   return (
@@ -47,7 +48,7 @@ export default function AppBar(props) {
                 className={classes.menuButton}
                 color="inherit"
                 aria-label="back"
-                href="/"
+                onClick={() => history.goBack()}
               >
                 <ChevronLeftIcon />
               </IconButton>
@@ -61,4 +62,5 @@ export default function AppBar(props) {
       </MUIAppBar>
     </div>
   );
-}
+};
+export default withRouter(AppBar);

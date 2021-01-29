@@ -15,19 +15,20 @@ import * as yup from "yup";
 import Training, { TrainingStep } from "../../../models/Training";
 import { modTraining } from "../../../redux/actions/trainingListAction";
 import { setCurrTraining } from "../../../redux/actions/currTrainingAction";
+import { setCurrTrainingStep } from "../../../redux/actions/currTrainingStepAction";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
 }));
 
-const ExerciseForm = (props) => {
+const TrainingStepFormMod = (props) => {
   const classes = useStyles();
 
-  const { dispatch, training, open, handleClose } = props;
+  const { dispatch, training, trainingStep, open, handleClose } = props;
 
   const validationSchema = yup.object({
     title: yup
-      .string("Entrer le nom de l'exercice")
+      .string("Donner un nom a votre entrainement")
       .min(3, "Le nom doit faire minimum 3 caracteres")
       .required("Le nom est requis"),
     duration: yup
@@ -45,21 +46,26 @@ const ExerciseForm = (props) => {
   });
 
   const formik = useFormik({
-    initialValues: { title: "" },
+    initialValues: {
+      title: trainingStep.title ? trainingStep.title : "",
+      duration: trainingStep.duration / 1000,
+    },
     validationSchema: validationSchema,
     onSubmit: (values) => {
+      let nextTrainingStep = TrainingStep(trainingStep);
+      nextTrainingStep.setTitle(values.title);
+      nextTrainingStep.setDuration(values.duration * 1000);
+      dispatch(setCurrTrainingStep(nextTrainingStep));
       let nextTraining = Training(training);
-      const nextDuration = values.duration * 1000;
-      const nextReposDuration = values.reposDuration * 1000;
-      let item = TrainingStep().setId(nextTraining.items.length);
-      item.setTitle(values.title).setDuration(nextDuration).show();
-      nextTraining.addItem("items", item);
-      if (values.reposDuration !== "0") {
+      nextTraining.modItemById("items", nextTrainingStep);
+      if (values.reposDuration && values.reposDuration !== "0") {
+        const nextReposDuration = values.reposDuration * 1000;
         let repos = TrainingStep().setId(nextTraining.items.length);
         repos.setTitle("Repos").setDuration(nextReposDuration).hide();
-        nextTraining.addItem("items", repos);
+        nextTraining.addItemAfterAnother("items", repos, nextTrainingStep);
       }
       dispatch(setCurrTraining(nextTraining));
+      dispatch(modTraining(nextTraining));
     },
   });
 
@@ -72,14 +78,16 @@ const ExerciseForm = (props) => {
         fullWidth
       >
         <form onSubmit={formik.handleSubmit}>
-          <DialogTitle id="form-dialog-title">Nouvel exercice</DialogTitle>
+          <DialogTitle id="form-dialog-title">
+            Modifier l'entrainement
+          </DialogTitle>
           <DialogContent>
             <TextField
               autoFocus
               margin="dense"
               id="title"
               name="title"
-              label="Nom de l'exercice"
+              label="Nom de l'entrainement"
               type="text"
               fullWidth
               value={formik.values.title}
@@ -103,7 +111,7 @@ const ExerciseForm = (props) => {
               margin="dense"
               id="reposDuration"
               name="reposDuration"
-              label="Duree du repos apres l'exercice"
+              label="Ajouter un temps de repos apres l'exercice"
               type="text"
               fullWidth
               value={formik.values.reposDuration}
@@ -126,7 +134,7 @@ const ExerciseForm = (props) => {
               fullWidth
               type="submit"
             >
-              Ajouter l'exercice
+              Modifier l'entrainement
             </Button>
           </DialogActions>
         </form>
@@ -137,6 +145,7 @@ const ExerciseForm = (props) => {
 
 const MapStateToProps = (state) => ({
   training: state.currTraining,
+  trainingStep: state.currTrainingStep,
 });
 
-export default connect(MapStateToProps)(ExerciseForm);
+export default connect(MapStateToProps)(TrainingStepFormMod);

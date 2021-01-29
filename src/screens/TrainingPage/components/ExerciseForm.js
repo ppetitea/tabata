@@ -54,12 +54,13 @@ const ExerciseForm = (props) => {
       let item = TrainingStep().setId(nextTraining.items.length);
       item.setTitle(values.title).setDuration(nextDuration).show();
       nextTraining.addItem("items", item);
-      if (values.reposDuration !== "0") {
+      if (values.reposDuration && values.reposDuration !== "0") {
         let repos = TrainingStep().setId(nextTraining.items.length);
         repos.setTitle("Repos").setDuration(nextReposDuration).hide();
         nextTraining.addItem("items", repos);
       }
       dispatch(setCurrTraining(nextTraining));
+      dispatch(modTraining(nextTraining));
     },
   });
 

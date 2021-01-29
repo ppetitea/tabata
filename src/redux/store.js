@@ -1,10 +1,12 @@
 import { createStore, combineReducers } from "@reduxjs/toolkit";
 import { currTrainingReducer } from "./reducers/currTrainingReducer";
+import { currTrainingStepReducer } from "./reducers/currTrainingStepReducer";
 import { trainingListReducer } from "./reducers/trainingListReducer";
 
 const rootReducers = combineReducers({
   trainingList: trainingListReducer,
   currTraining: currTrainingReducer,
+  currTrainingStep: currTrainingStepReducer,
 });
 
 // convert object to string and store in localStorage

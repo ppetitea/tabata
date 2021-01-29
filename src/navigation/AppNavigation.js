@@ -1,21 +1,29 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import HomePage from "../screens/HomePage/HomePage";
+import { BrowserRouter, HashRouter, Switch, Route } from "react-router-dom";
 import TrainingPage from "../screens/TrainingPage/TrainingPage";
+import TrainingRunPage from "../screens/TrainingRunPage/TrainingRunPage";
+import TrainingListPage from "../screens/TrainingListPage/TrainingListPage";
+import { config } from "../services/services";
 
 export default function AppNavigation() {
+  const Router = config.isProdEnv() ? HashRouter : BrowserRouter;
+  const basename = config.isProdEnv() ? "/tabata/" : "/";
+
   return (
-    <Router>
-        {/* A <Switch> looks through its children <Route>s and
+    <Router basename={basename}>
+      {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-        <Switch>
-          <Route path="/training">
-            <TrainingPage />
-          </Route>
-          <Route path="/">
-            <HomePage />
-          </Route>
-        </Switch>
+      <Switch>
+        <Route exact path="/">
+          <TrainingListPage />
+        </Route>
+        <Route path="/training">
+          <TrainingPage />
+        </Route>
+        <Route path="/training-run">
+          <TrainingRunPage />
+        </Route>
+      </Switch>
     </Router>
   );
 }

@@ -10,8 +10,8 @@ const Maths = () => {
 
 const canHandleRange = (state) => ({
   belongRange: (min, max, n) => min <= n && n <= max, // [min - max]
-  belongRangeMax: (min, max, n) => min <= n && n <= max, // ]min - max]
-  belongRangeMin: (min, max, n) => min <= n && n <= max, // [min - max[
+  belongRangeMax: (min, max, n) => min < n && n <= max, // ]min - max]
+  belongRangeMin: (min, max, n) => min <= n && n < max, // [min - max[
   outRange: (min, max, n) => n <= min && max <= n,
 });
 

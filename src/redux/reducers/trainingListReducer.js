@@ -1,4 +1,4 @@
-import Training from "../../models/Training";
+import Training, { TrainingList } from "../../models/Training";
 import {
   TRAINING_LIST_SET,
   TRAINING_ADD,
@@ -7,12 +7,7 @@ import {
   TRAINING_MOVE,
 } from "../constants";
 
-let initialTraining = Training();
-initialTraining.setId("default").setCollection("items", []);
-
-const initialState = () => ({
-  list: [initialTraining],
-});
+const initialState = () => TrainingList({ list: [] }).setId();
 
 const trainingListReducer = (state = initialState(), action) => {
   switch (action.type) {

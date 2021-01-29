@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 export const canHandleInit = (state) => ({
   fromLastState: (lastState) => {
     Object.assign(state, lastState);
@@ -30,7 +32,7 @@ export const canHandleTitle = (state) => ({
 
 export const canHandleId = (state) => ({
   getId: () => state.id,
-  setId: (v) => {
+  setId: (v = uuidv4()) => {
     state.id = v;
     return state;
   },
@@ -74,6 +76,11 @@ export const canHandleCollection = (state) => ({
       if (item.getKey() === key) return item;
     }
   },
+  getItemIndexById: (collection, id) => {
+    for (const index of state[collection].keys()) {
+      if (state[collection][index].getId() === id) return index;
+    }
+  },
   addItem: (collection, item) => {
     if (state[collection]) {
       state[collection] = [...state[collection], item];
@@ -82,6 +89,11 @@ export const canHandleCollection = (state) => ({
   },
   addItemStart: (collection, item) => {
     state[collection] = [item, ...state[collection]];
+    return state;
+  },
+  addItemAfterAnother: (collection, item, another) => {
+    const index = state.getItemIndexById(collection, another.id);
+    state[collection].splice(index + 1, 0, item);
     return state;
   },
   delItemById: (collection, id) => {
@@ -100,7 +112,7 @@ export const canHandleCollection = (state) => ({
   },
   modItemById: (collection, nextItem) => {
     state[collection] = state[collection].map((item) => {
-      if (item.getId() === nextItem.getId()) return nextItem;
+      if (item.id === nextItem.id) return nextItem;
       else return item;
     });
     return state;
@@ -117,6 +129,20 @@ export const canHandleCollection = (state) => ({
       if (item.getKey() === nextItem.getKey()) return nextItem;
       else return item;
     });
+    return state;
+  },
+  justReorder: (list, startIndex, endIndex) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+    return result;
+  },
+  reorder: (collection, startIndex, endIndex) => {
+    state[collection] = state.justReorder(
+      state[collection],
+      startIndex,
+      endIndex
+    );
     return state;
   },
 });

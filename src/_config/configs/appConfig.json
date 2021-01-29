@@ -1,0 +1,8 @@
+{
+	"timeDirection": "DECREMENT",
+	"timerBeep": "https://lasonotheque.org/UPLOAD/mp3/2061.mp3",
+	"timerBeeps": [
+		"https://lasonotheque.org/UPLOAD/mp3/2061.mp3",
+		"https://lasonotheque.org/UPLOAD/mp3/2255.mp3"
+	]
+}
