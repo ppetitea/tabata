@@ -111,7 +111,7 @@ const TrainingStepFormMod = (props) => {
               margin="dense"
               id="reposDuration"
               name="reposDuration"
-              label="Ajouter un temps de repos apres l'exercice"
+              label="Ajouter un temps de repos"
               type="text"
               fullWidth
               value={formik.values.reposDuration}
