@@ -112,6 +112,7 @@ const TrainingSetupPage = (props) => {
                               let nextTraining = Training(training);
                               nextTraining.delItemByIndex("items", i);
                               dispatch(setCurrTraining(nextTraining));
+                              dispatch(modTraining(nextTraining));
                             }}
                           />
                         </div>

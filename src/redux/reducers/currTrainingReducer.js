@@ -11,8 +11,9 @@ const currTrainingReducer = (state = initialState(), action) => {
       const nextState = { ...action.payload };
       return nextState;
     }
-    default:
+    default: {
       return state;
+    }
   }
 };
 
